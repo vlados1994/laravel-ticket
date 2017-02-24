@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\TicketFormRequest;
 use App\Ticket;
+use Illuminate\Support\Facades\Mail;
 class TicketsController extends Controller
 {
     /**
@@ -45,8 +46,20 @@ class TicketsController extends Controller
 
         $ticket->save();
 
+        $data = array(
+            'ticket' => $slug,
+        );
+
+        Mail::send('emails.ticket', $data, function ($message) {
+
+            $message->from('moofik12@gmail.com', 'Learning Laravel');
+
+            $message->to('w5www@ya.ru')->subject('You have registered new ticket');
+
+        });
+
         return redirect('/contact')->with('status', 'Здаров, бро. Твое обращение зарегестрировано под номером: '.$slug
-            .' </br>Сохрани этот номер, если собираешься отслеживать свое обращение.');
+            .'\n Сохрани этот номер, если собираешься отслеживать свое обращение.');
     }
 
     /**
@@ -58,8 +71,8 @@ class TicketsController extends Controller
     public function show($slug)
     {
         $ticket = Ticket::whereSlug($slug)->firstOrFail();
-
-        return view('tickets.show', ["ticket"=>$ticket]);
+        $comments = $ticket->comments()->get();
+        return view('tickets.show', ["ticket"=>$ticket, "comments"=>$comments]);
     }
 
     /**
@@ -71,7 +84,7 @@ class TicketsController extends Controller
     public function edit($slug)
     {
         $ticket = Ticket::whereSlug($slug)->firstOrFail();
-        return view('tickets.edit', ['ticket'=>$ticket, 'php_self'=>$_SERVER['PHP_SELF'] ]);
+        return view('tickets.edit', ['ticket'=>$ticket, 'php_self'=>$_SERVER['REQUEST_URI'] ]);
     }
 
     /**
@@ -102,9 +115,11 @@ class TicketsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($slug)
     {
-        //
+        $ticket = Ticket::whereSlug($slug)->firstOrFail();
+        $ticket->delete();
+        return redirect('/tickets')->with('status', 'The ticket ' . $slug . ' has been deleted.');
     }
 
     
