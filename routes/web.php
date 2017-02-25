@@ -17,10 +17,10 @@ Route::get('/contact', 'TicketsController@create');
 Route::post('/contact', 'TicketsController@store');
 Route::get('/tickets', 'TicketsController@index');
 
-Route::post('/tickets/{slug}', 'TicketsController@destroy');
+Route::post('/tickets/{slug}/delete', 'TicketsController@destroy');
 Route::get('/tickets/{slug}', 'TicketsController@show');
 
-
-Route::post('/ticket/{slug}/edit','TicketsController@update');
+Route::post('/tickets/{slug}/edit','TicketsController@update');
 Route::get('/tickets/{slug}/edit', 'TicketsController@edit');
 
+Route::post('/comment', 'CommentsController@newComment');
