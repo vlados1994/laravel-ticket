@@ -21,6 +21,11 @@ class CommentsController extends Controller
         );
         $comment->save();
 
-        return redirect()->back()->with('status', 'Твой комментарий был добавлен.');
+        return redirect()->back()->with(
+            [
+                'status' => 'Твой комментарий был добавлен.',
+                'status_2' => 'А вообще можешь идти на хуй. Чмо.',
+            ]
+        );
     }
 }
