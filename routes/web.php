@@ -11,16 +11,33 @@
 |
 */
 
+//pages
 Route::get('/', 'PagesController@home');
+
+//about 
 Route::get('/about', 'PagesController@about');
+
+//contact
 Route::get('/contact', 'TicketsController@create');
 Route::post('/contact', 'TicketsController@store');
-Route::get('/tickets', 'TicketsController@index');
 
+//tickets
+Route::get('/tickets', 'TicketsController@index');
 Route::post('/tickets/{slug}/delete', 'TicketsController@destroy');
 Route::get('/tickets/{slug}', 'TicketsController@show');
-
 Route::post('/tickets/{slug}/edit','TicketsController@update');
 Route::get('/tickets/{slug}/edit', 'TicketsController@edit');
 
+//comment
 Route::post('/comment', 'CommentsController@newComment');
+
+//auth
+Auth::routes();
+Route::get('/logout', 'Auth\LoginController@logout');
+//admin part
+Route::group(['middleware' => 'admin'], function () {
+
+	Route::get('/admin', 'Admin\BackendController@index')->name('admin');
+	Route::get('/admin/routing', 'Admin\Pages\routingController@index')->name('routing');
+
+});
