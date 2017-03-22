@@ -44,7 +44,7 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
                         &nbsp;
-                        @yield('left-nav')
+                        @include('shared.admin-navbar')
                     </ul>
 
                     <!-- Right Side Of Navbar -->
