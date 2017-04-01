@@ -22,7 +22,7 @@
         ]) !!};
     </script>
 </head>
-<body>
+<body class="bg-white">
     <div id="app">
         <nav class="navbar navbar-default navbar-static-top">
             <div class="container">
