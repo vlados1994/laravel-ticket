@@ -19,9 +19,6 @@ class CreateCatalogProductsTable extends Migration
             $table->string('name');
             $table->text('description');
             $table->integer('price');
-            $table->string('color');    
-            $table->string('size_whd');
-            $table->integer('quantity');
             $table->string('url_part')->unique();
             $table->boolean('active');
             $table->timestamps();
