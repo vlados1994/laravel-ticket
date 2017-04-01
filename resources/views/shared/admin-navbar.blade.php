@@ -17,7 +17,7 @@
         <span class="caret"></span>
     </a> 
     <ul class="dropdown-menu" role="menu"> 
-        <li> <a href="{{route('routing')}}"> Catalog</a> </li>
+        <li> <a href="{{route('catalog')}}"> Каталог</a> </li>
     </ul> 
 
 </li>

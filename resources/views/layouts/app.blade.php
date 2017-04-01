@@ -14,6 +14,8 @@
     <link href="/css/app.css" rel="stylesheet">
     <link href="/css/main.css" rel="stylesheet">
     <!-- Scripts -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
     <script>
         window.Laravel = {!! json_encode([
             'csrfToken' => csrf_token(),
@@ -84,5 +86,6 @@
 
     <!-- Scripts -->
     <script src="/js/app.js"></script>
+    @yield('scripts')
 </body>
 </html>
