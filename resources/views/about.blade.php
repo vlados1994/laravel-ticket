@@ -1,4 +1,4 @@
-@extends('master')
+@extends('main.mainpage')
 
 @section('title', 'About')
 

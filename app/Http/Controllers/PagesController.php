@@ -7,9 +7,9 @@
 
 	class PagesController extends Controller
 	{
-	    public function home()
+	    public function main()
 	    {
-	        return view('welcome');
+	        return view('main.mainpage');
 	    }
 
 		public function about()

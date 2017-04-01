@@ -15,11 +15,11 @@ class CreateCatalogCategoriesTable extends Migration
     {
         Schema::create('catalog_categories', function (Blueprint $table) {
             $table->increments('category_id');
-            $table->integer('parent_id');
+            $table->integer('parent_id')->nullable();
             $table->string('name');
             $table->string('description');
             $table->boolean('active');
-            $table->string('url_part')->unique();
+            $table->string('url_part')->unique()->nullable();
             $table->timestamps();
         });
     }

@@ -12,32 +12,27 @@
 */
 
 //pages
-Route::get('/', 'PagesController@home');
+Route::get('/', 'PagesController@main');
 
 //about 
 Route::get('/about', 'PagesController@about');
 
-//contact
-Route::get('/contact', 'TicketsController@create');
-Route::post('/contact', 'TicketsController@store');
-
-//tickets
-Route::get('/tickets', 'TicketsController@index');
-Route::post('/tickets/{slug}/delete', 'TicketsController@destroy');
-Route::get('/tickets/{slug}', 'TicketsController@show');
-Route::post('/tickets/{slug}/edit','TicketsController@update');
-Route::get('/tickets/{slug}/edit', 'TicketsController@edit');
-
-//comment
-Route::post('/comment', 'CommentsController@newComment');
-
 //auth
 Auth::routes();
 Route::get('/logout', 'Auth\LoginController@logout');
+
 //admin part
 Route::group(['middleware' => 'admin'], function () {
 
 	Route::get('/admin', 'Admin\BackendController@index')->name('admin');
-	Route::get('/admin/routing', 'Admin\Pages\routingController@index')->name('routing');
+	Route::get('/admin/routing', 'Admin\Pages\RoutingController@index')->name('routing');
+
+	//catalog routes
+	Route::get('/admin/modules/catalog', 'Admin\Modules\CatalogController@showCategories')
+         ->name('catalog');
+    Route::post('/admin/modules/catalog/ajax/{action?}', 'Admin\Modules\CatalogController@ajax')
+        ->name('catalogAjax');
+    Route::get('/admin/modules/catalog/ajax/{action?}', 'Admin\Modules\CatalogController@ajax')
+        ->name('catalogAjax');
 
 });
