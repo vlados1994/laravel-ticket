@@ -10,16 +10,19 @@
     <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
     <!-- Bootstrap Material Design -->
-    <link rel="stylesheet" type="text/css" href="/css/bootstrap-material-design.css">
+    {{--<link rel="stylesheet" type="text/css" href="/css/bootstrap-material-design.css">--}}
     <!-- <link rel="stylesheet" type="text/css" href="/css/ripples.min.css"> -->
     <link rel="stylesheet" type="text/css" href="/css/main.css">
-
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+    <!-- bxSlider Javascript file -->
+    <script src="/js/jquery.bxslider.min.js"></script>
+    <!-- bxSlider CSS file -->
+    <link href="/lib/jquery.bxslider.css" rel="stylesheet" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
-<body>
+<body class="bg-white">
 	@include('shared.navbar')
 	@yield('content')
-	<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 	<!-- <script src="/js/ripples.min.js"></script> -->
 	<script src="/js/material.min.js"></script>
@@ -28,6 +31,10 @@
         // This command is used to initialize some elements and make them work properly
         $.material.init();
     });
-</script>
+    </script>
+    @yield('scripts')
+    <footer>
+        Привет я футер
+    </footer>
 </body>
 </html>

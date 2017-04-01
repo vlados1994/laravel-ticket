@@ -13,6 +13,7 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div>
             <ul class="nav navbar-nav">
+                <li class="active"><a href="/">Главная</a></li>
                 <li class="active"><a href="/">Каталог</a></li>
                 <li><a href="/about">Доставка</a></li>
                 <li><a href="/contact">Контакты</a></li>
