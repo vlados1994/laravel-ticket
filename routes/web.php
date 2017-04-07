@@ -30,9 +30,12 @@ Route::group(['middleware' => 'admin'], function () {
 	//catalog routes
 	Route::get('/admin/modules/catalog', 'Admin\Modules\CatalogController@showCategories')
          ->name('catalog');
-    Route::post('/admin/modules/catalog/ajax/{action?}', 'Admin\Modules\CatalogController@ajax')
+    Route::get('/admin/modules/products', 'Admin\Modules\CatalogController@showProducts')
+        ->name('products');
+    Route::post('/admin/modules/catalog/ajax/{action?}', 'Admin\Modules\CatalogController@ajaxCatalog')
         ->name('catalogAjax');
-    Route::get('/admin/modules/catalog/ajax/{action?}', 'Admin\Modules\CatalogController@ajax')
-        ->name('catalogAjax');
-
+    Route::post('/admin/modules/products/ajax/{action?}', 'Admin\Modules\CatalogController@ajaxProducts')
+        ->name('productsAjax');
+    Route::get('/admin/modules/products/ajax/{action?}', 'Admin\Modules\CatalogController@ajaxProducts')
+        ->name('productsAjax');
 });

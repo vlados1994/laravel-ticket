@@ -24,20 +24,20 @@ class CatalogAjaxRequest extends FormRequest
      */
     public function rules()
     {
-
-        return [
-            'parent_id' => [
-                'required',
-                Rule::exists('catalog_categories', 'parent_id')
-                    ->where(function ($query){
-                        $parent_id = $this->input('parent_id');
-                        $query->where('cartegory_id', $parent_id);
-                    }),
-            ],
-            'url_part' => [
-                'required',
-                'regex:[a-zA-Z0-9-]',
-            ]
-        ];
+//
+//        return [
+//            'parent_id' => [
+//                'required',
+//                Rule::exists('catalog_categories', 'parent_id')
+//                    ->where(function ($query){
+//                        $parent_id = $this->input('parent_id');
+//                        $query->where('cartegory_id', $parent_id);
+//                    }),
+//            ],
+//            'url_part' => [
+//                'required',
+//                'regex:[a-zA-Z0-9-]',
+//            ]
+//        ];
     }
 }
