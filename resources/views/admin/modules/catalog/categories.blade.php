@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('nav-title')
     Admin Panel
@@ -41,7 +41,12 @@
                     <div class="checkbox">
                         <label><input id="active" type="checkbox"> Показывать на сайте</label>
                     </div>
+                    <div id="new-fields-container"></div>
+                    <button id="add-new-field" type="button" class="btn btn-default btn-lg top-buffer">
+                        <span class="glyphicon glyphicon-plus"></span> Добавить новое поле
+                    </button>
                 </form>
+
             </div>
         </div>
 
@@ -73,6 +78,9 @@
                 var description = $( "#description" ).val();
                 var url_part = $( "#url_part" ).val();
                 var active = $( "#active" ).is(":checked");
+                var additional = [];
+
+
 
                 var request = $.ajax({
                     url: "{{route('catalogAjax')}}",
@@ -85,14 +93,27 @@
                         'active' : active,
                         '_token': $('meta[name="csrf-token"]').attr('content'),
                     },
-                    dataType: "json",
+                    dataType: "text",
                     success: function( msg ) {
                         console.log(msg);
                     },
                     error: function( jqXHR, textStatus ) {
-                        alert( "Request failed: " + textStatus );
+                        alert( "Request failed: " + jqXHR );
                     }
                 });
+            });
+
+            $('#add-new-field').click(function(){
+                $('#new-fields-container').append(
+                '<div class="form-group new-category-field">' +
+                    '<label for="url_part">Название аттрибута</label>' +
+                    '<input type="text" class="form-control" id="url_part" data-type="name">' +
+                '</div>' +
+                '<div class="form-group new-category-field">' +
+                    '<label for="url_part">Тип</label>' +
+                    '<input type="text" class="form-control" data-type="type">' +
+                '</div>'
+                );
             });
 
 

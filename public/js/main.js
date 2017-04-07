@@ -45,4 +45,6 @@ $( document ).ready(function() {
     });
 
     $('.bxslider').bxSlider();
+
+    $('.footer').fadeIn(500);
 });

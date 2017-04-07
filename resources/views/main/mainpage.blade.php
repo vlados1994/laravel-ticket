@@ -74,8 +74,8 @@
 		</ul>
 	</div>
 	<ul class="bxslider">
-		<li><img src="/images/ipad-air-2.jpg" /></li>
-		<li><img src="/images/iPhone-7-1.jpg" /></li>
+		<li><img src="/images/slide1.jpg" /></li>
+		<li><img src="/images/slide2.jpg" /></li>
 	</ul>
 </div>
 @endsection

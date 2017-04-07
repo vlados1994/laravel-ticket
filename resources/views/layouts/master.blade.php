@@ -12,18 +12,18 @@
     <!-- Bootstrap Material Design -->
     {{--<link rel="stylesheet" type="text/css" href="/css/bootstrap-material-design.css">--}}
     <!-- <link rel="stylesheet" type="text/css" href="/css/ripples.min.css"> -->
-    <link rel="stylesheet" type="text/css" href="/css/main.css">
+
     <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
     <!-- bxSlider Javascript file -->
-    <script src="/js/jquery.bxslider.min.js"></script>
+    <script src="{{asset('/js/jquery.bxslider.min.js')}}"></script>
     <!-- bxSlider CSS file -->
-    <link href="/lib/jquery.bxslider.css" rel="stylesheet" />
+    <link href="{{asset('/css/jquery.bxslider.min.css')}}" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body class="bg-white">
 	@include('shared.navbar')
 	@yield('content')
-
 	<!-- <script src="/js/ripples.min.js"></script> -->
 	<script src="/js/material.min.js"></script>
 	<script>
@@ -34,7 +34,41 @@
     </script>
     @yield('scripts')
     <footer>
-        Привет я футер
+    <div class="row footer">
+        <div class="col-md-12 feedback">
+            <p>
+                <img src="/images/phone.png"/>Закать обратный звонок</p>
+        </div>
+        <div class="col-md-4">
+            <h4>Интернет магазин</h4>
+            <ul>
+                <li><a>Главная</a></li>
+                <li><a>Каталог</a></li>
+                <li><a>Доставка</a></li>
+                <li><a>Контакты</a></li>
+                <li><a>О нас</a></li>
+            </ul>
+        </div>
+        <div class="col-md-4 middle">
+            <h4>Контакты</h4>
+            <p>
+                +7(913)123 45 00
+            </p>
+            <p>
+                +7(913)123 45 99
+            </p>
+        </div>
+        <div class="col-md-4">
+            <h4>AppleMarket</h4>
+            <p>
+                Мы в социальных сетях:
+            </p>
+        </div>
+        <div class="col-md-12 copyright">
+            <p>Закать обратный звонок</p>
+        </div>
+    </div>
+
     </footer>
 </body>
 </html>

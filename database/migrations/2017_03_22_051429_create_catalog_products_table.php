@@ -14,12 +14,13 @@ class CreateCatalogProductsTable extends Migration
     public function up()
     {
         Schema::create('catalog_products', function (Blueprint $table) {
-            $table->increments('product_id');
+            $table->increments('id');
             $table->integer('category_id');
             $table->string('name');
             $table->text('description');
             $table->integer('price');
             $table->string('url_part')->unique();
+            $table->string('img_path')->nullable();
             $table->boolean('active');
             $table->timestamps();
         });
