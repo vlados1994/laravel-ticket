@@ -19,7 +19,6 @@ class CreateCatalogCategoriesTable extends Migration
             $table->string('name');
             $table->string('description');
             $table->boolean('active');
-            $table->boolean('availability');
             $table->string('type')->nullable();
             $table->string('url_part')->unique()->nullable();
             $table->timestamps();

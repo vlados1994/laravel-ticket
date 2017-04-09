@@ -21,6 +21,7 @@ class CreateCatalogProductsTable extends Migration
             $table->integer('price');
             $table->string('url_part')->unique();
             $table->string('img_path')->nullable();
+            $table->boolean('availability');
             $table->boolean('active');
             $table->timestamps();
         });

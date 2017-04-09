@@ -9,7 +9,8 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\Modules\Admin\Routing\Routing;
 use App\Catalog as Catalog;
 use App\Products as Products;
-use App\Attr as Attr;
+use App\Attrs as Attr;
+use App\AttrsValues as AttrsValues;
 use Illuminate\Http\Request;
 
 class CatalogController extends Controller
@@ -34,9 +35,12 @@ class CatalogController extends Controller
 
     public function ajaxCatalog(Request $request, $action = null) {
         $input = $request->all();
+
         try {
             $category = new Catalog;
-            $category->parent_id = $input['parent_id'];
+            if($input['parent_id'] != '' && $input['parent_id'] != null) {
+                $category->parent_id = $input['parent_id'];
+            }
             $category->name = $input['name'];
             $category->description = $input['description'];
             $category->active = ($input['active'] == 'true' ? true : false);
@@ -46,6 +50,21 @@ class CatalogController extends Controller
         catch (\Exception $e) {
             return $e;
         }
+
+        $additionalAttrs = $input['additional'];
+        foreach($additionalAttrs as $attrName=>$type) {
+            try {
+                $attr = new Attr;
+                $attr->category_id = $category->id;
+                $attr->name = $attrName;
+                $attr->type = $type;
+                $attr->save();
+            }
+            catch(\Exception $e) {
+                return $e;
+            }
+        }
+
         return "ok";
     }
 
@@ -55,38 +74,78 @@ class CatalogController extends Controller
         if($action == 'add') {
             try {
                 $product = new Products;
-                $product->parent_id = $input['parent_id'];
+                $product->category_id = $input['category_id'];
                 $product->name = $input['name'];
+                $product->price = $input['price'];
                 $product->description = $input['description'];
                 $product->active = ($input['active'] == 'true' ? true : false);
+                $product->availability = ($input['availability'] == 'true' ? true : false);
                 $product->url_part = $input['url_part'];
+                $product->img_path = $input['img_path'];
                 $product->save();
             }
             catch (\Exception $e) {
                 return $e;
             }
+
+            $additionalAttrs = $input['additional'];
+            foreach($additionalAttrs as $attrId=>$value) {
+                try {
+                    $attrValue = new AttrsValues();
+                    $attrValue->product_id = $product->id;
+                    $attrValue->attribute_id = $attrId;
+
+                    $type = Attr::find($attrId)->type;
+                    switch ($type) {
+                        case 'int':
+                            $attrValue->value_int = intval($value);
+                            break;
+                        case 'bool':
+                            $attrValue->value_bool = boolval($value);
+                            break;
+                        case 'generic':
+                            $attrValue->value_generic = $value;
+                            break;
+                        case 'string':
+                            $attrValue->value_generic = $value;
+                            break;
+                        case 'date':
+                            $attrValue->value_date = $value;
+                            break;
+                        default:
+                            continue;
+                    }
+                    $attrValue->save();
+                }
+                catch(\Exception $e) {
+                    return $e;
+                }
+            }
+
             return "ok";
         }
         else {
-            try {
-                $cols = \DB::connection()->getSchemaBuilder()->getColumnListing($input['type']);
-            }
-            catch (\Exception $e) {
-                return $e;
+            $categoryId = $input['id'];
+            $attrs = Attr::where('category_id', $categoryId)->get();
+
+            while(true) {
+                foreach ($attrs as $attr) {
+                    $col_result[$attr->id] = $attr->name;
+                }
+
+                $categoryId = Catalog::where('id', $categoryId)->first()->parent_id;
+                if($categoryId != null) {
+                    $attrs = Attr::where('category_id', $categoryId)->get();
+                }
+                else {
+                    break;
+                }
+
             }
 
-            //негибкий метод. TODO: придумать как исправить.
-            // хотя мб и гибкий. убираем два последних значения которые есть во всех таблицах ларавел
-            // с датой создания и модификации, так же столбцы primary key и foreign key (содержащие в названии 'id')
-            array_pop($cols);
-            array_pop($cols);
-            for($i = 0; $i < count($cols); $i++) {
-                if(strpos($cols[$i], 'id') === false) {
-                    $col_result[] = $cols[$i];
-                }
-            }
+            return response()->json($col_result);
         }
-        return response()->json($col_result);
+
     }
 
 }
