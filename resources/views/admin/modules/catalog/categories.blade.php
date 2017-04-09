@@ -58,6 +58,7 @@
 @endsection
 
 @section('scripts')
+    <script src="{{asset('/js/helper.js')}}"></script>
     <script>
         $(function () {
             $('#add-category').click(function () {
@@ -78,9 +79,16 @@
                 var description = $( "#description" ).val();
                 var url_part = $( "#url_part" ).val();
                 var active = $( "#active" ).is(":checked");
-                var additional = [];
 
+                var additionalKeys = $('#new-fields-container input[data-type="name"]').map(function(){
+                    return $( this ).val();
+                }).get();
 
+                var additionalValues = $('#new-fields-container input[data-type="type"]').map(function(){
+                    return $( this ).val();
+                }).get();
+
+                var additional = arrayCombine(additionalKeys, additionalValues);
 
                 var request = $.ajax({
                     url: "{{route('catalogAjax')}}",
@@ -91,6 +99,7 @@
                         'description' : description,
                         'url_part' : url_part,
                         'active' : active,
+                        'additional' : additional,
                         '_token': $('meta[name="csrf-token"]').attr('content'),
                     },
                     dataType: "text",
@@ -98,22 +107,32 @@
                         console.log(msg);
                     },
                     error: function( jqXHR, textStatus ) {
-                        alert( "Request failed: " + jqXHR );
+                        console.log( "Request failed: " + jqXHR );
+                        console.log(textStatus);
                     }
                 });
             });
 
             $('#add-new-field').click(function(){
-                $('#new-fields-container').append(
-                '<div class="form-group new-category-field">' +
-                    '<label for="url_part">Название аттрибута</label>' +
-                    '<input type="text" class="form-control" id="url_part" data-type="name">' +
-                '</div>' +
-                '<div class="form-group new-category-field">' +
-                    '<label for="url_part">Тип</label>' +
-                    '<input type="text" class="form-control" data-type="type">' +
-                '</div>'
-                );
+                $nfContainer = $('#new-fields-container');
+                if( $nfContainer.html() != '') {
+                    if( $('#new-fields-container input[data-type="name"]:last').val() == ''
+                        || $('#new-fields-container input[data-type="type"]:last').val() == '') {
+                        alert('Заполните необходимые поля, прежде чем добавлять новые.');
+                        return;
+                    }
+                }
+                    $nfContainer.append(
+                    '<div class="form-group new-category-field">' +
+                        '<label for="url_part">Название аттрибута</label>' +
+                        '<input type="text" class="form-control" id="url_part" data-type="name">' +
+                    '</div>' +
+                    '<div class="form-group new-category-field">' +
+                        '<label for="url_part">Тип</label>' +
+                        '<input type="text" class="form-control" data-type="type">' +
+                    '</div>'
+                    );
+
             });
 
 

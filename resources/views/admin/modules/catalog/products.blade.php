@@ -27,7 +27,7 @@
                         <label for="category">Выберите категорию</label>
                         <select id="category">
                             @foreach($categories as $category)
-                                <option value="{{$category->type}}">{{$category->name}}</option>
+                                <option value="{{$category->id}}">{{$category->name}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -48,8 +48,8 @@
                         <input type="text" class="form-control" id="url_part">
                     </div>
                     <div class="form-group">
-                        <label for="url_path">url_path</label>
-                        <input type="text" class="form-control" id="url_path">
+                        <label for="url_path">Путь до изображения</label>
+                        <input type="text" class="form-control" id="img_path">
                     </div>
                     <div class="form-group">
                         <label for="availability">В наличии</label>
@@ -73,25 +73,26 @@
 @endsection
 
 @section('scripts')
+    <script src="{{asset('/js/helper.js')}}"></script>
     <script>
         $(function () {
             $('#category').change(
                 function (e) {
-                    var type = $(this).val();
+                    var id = $(this).val();
                     $.ajax({
                         url: "{{route('productsAjax')}}",
                         method: "POST",
                         data: {
-                            'type' : type,
+                            'id' : id,
                             '_token': $('meta[name="csrf-token"]').attr('content'),
                         },
                         dataType: "json",
                         success: function( msg ) {
-                            for(var i = 0; i < msg.length; i++) {
+                            for(var key in msg) {
                                 $('#category-fields').append('<div class="form-group"><label for="'
-                                    + msg[i] + '">'+ msg[i]
-                                    + '</label><input type="text" class="form-control"id="'
-                                    + msg[i] + '"></div>'
+                                    + key + '">'+ msg[key]
+                                    + '</label><input type="text" class="form-control" id="'
+                                    + key + '"></div>'
                                 );
                             }
                         },
@@ -115,12 +116,26 @@
                 $('#products-add-form').prop('hidden', true);
                 $('#add-product-submit').css('display', 'none');
 
-                var category_id = $( "#name" ).val();
+                var category_id = $( "#category option:selected" ).val();
                 var name = $( "#name" ).val();
                 var price = $( "#price" ).val();
                 var description = $( "#description" ).val();
                 var url_part = $( "#url_part" ).val();
+                var img_path = $( "#img_path" ).val();
                 var active = $( "#active" ).is(":checked");
+                var availability = $( "#availability" ).is(":checked");
+
+                var $additionalFields = $('#category-fields input');
+
+                var additionalKeys = $additionalFields.map(function(){
+                    return this.id;
+                }).get();
+
+                var additionalValues = $additionalFields.map(function(){
+                    return $( this ).val();
+                }).get();
+
+                var additional = arrayCombine(additionalKeys, additionalValues);
 
                 var action = "add";
 
@@ -129,10 +144,14 @@
                     method: "POST",
                     data: {
                         'name' : name,
-                        'parent_id' : parent_id,
+                        'category_id' : category_id,
+                        'price' : price,
                         'description' : description,
                         'url_part' : url_part,
+                        'img_path' : img_path,
                         'active' : active,
+                        'availability' : availability,
+                        'additional' : additional,
                         '_token': $('meta[name="csrf-token"]').attr('content'),
                     },
                     dataType: "text",
