@@ -6,7 +6,7 @@
 
 @section('content')
     <div class="container">
-        <h3>Каталог: настройки</h3>
+        <h3>Каталог: товары</h3>
         <div class="row no-margins">
             <button id="add-product" type="button" class="btn btn-default btn-lg">
                 <span class="glyphicon glyphicon-plus"></span> Добавить новый товар
@@ -16,17 +16,23 @@
         <div class="row no-margins">
 
             <div id="products-list" class="col-lg-6 block-bordered top-buffer bg-white">
-                <div class="block-title-row">Список товаров</div>
-
+                <div class="block-title-row">Список товаров по категориям</div>
+                <div id="products-container">
+                    <br/><a class="0" href="#">Все категории</a>
+                    @foreach($rootCategories as $category)
+                        <br/><a  href="#" class="{{$category->id}}">{{$category->name}}</a>
+                    @endforeach
+                </div>
             </div>
 
             <div id="products-add-form" class="col-lg-6 block-bordered top-buffer bg-white" hidden>
                 <div class="block-title-row">Добавить товар</div>
-                <form class="top-buffer bottom-buffer">
+                <form id="products-add" class="top-buffer bottom-buffer">
                     <div class="form-group">
                         <label for="category">Выберите категорию</label>
                         <select id="category">
-                            @foreach($categories as $category)
+                            <option selected disabled>Выберите категорию</option>
+                            @foreach($activeCategories as $category)
                                 <option value="{{$category->id}}">{{$category->name}}</option>
                             @endforeach
                         </select>
@@ -75,12 +81,76 @@
 @section('scripts')
     <script src="{{asset('/js/helper.js')}}"></script>
     <script>
+
+        function productsRetrieve(catId) {
+            $.ajax({
+                url: "{{route('productsRetrieve')}}",
+                method: "POST",
+                data: {
+                    'id' : catId,
+                    '_token': $('meta[name="csrf-token"]').attr('content'),
+                },
+                dataType: "json",
+                success: function( msg ) {
+                    $('#products-container').append('' +
+                        '<div class="top-buffer block-title-row">Список товаров: </div>');
+                    for(var key in msg) {
+                        $('#products-container').append(
+                            '<a href="#">' + msg[key] + "</a>"
+                        );
+                    }
+                },
+                error: function( jqXHR, textStatus ) {
+                    console.log( "Request failed: " + jqXHR );
+                }
+            });
+        }
+
+        function acnhorClickListener() {
+            $('#products-list').click(function (e) {
+                e.preventDefault();
+                if(e.target.tagName != 'A') {
+                    return;
+                }
+                var catId = $(e.target).attr('class');
+                console.log(catId);
+                $.ajax({
+                    url: "{{route('categoriesRetrieve')}}",
+                    method: "POST",
+                    data: {
+                        'id' : catId,
+                        '_token': $('meta[name="csrf-token"]').attr('content'),
+                    },
+                    dataType: "json",
+                    success: function( msg ) {
+                        console.log(msg);
+                        $('#products-container').html('');
+                        for(var key in msg) {
+                            $('#products-container').append(
+                                '<br/><a  href="#" class="'+ key + '">' + msg[key] + '</a>'
+                            );
+                        }
+                        productsRetrieve(catId);
+                    },
+                    error: function( jqXHR, textStatus ) {
+                        $('#products-container').html('');
+                        console.log( "Request failed: " + jqXHR );
+                        productsRetrieve(catId);
+                    }
+                });
+
+
+            });
+        }
+
         $(function () {
+            acnhorClickListener();
             $('#category').change(
                 function (e) {
+                    $('#category-fields').html('');
                     var id = $(this).val();
                     $.ajax({
-                        url: "{{route('productsAjax')}}",
+                        url: "{{route('productsAttrsRetrieve')}}",
                         method: "POST",
                         data: {
                             'id' : id,
@@ -140,7 +210,7 @@
                 var action = "add";
 
                 $.ajax({
-                    url: "{{route('productsAjax')}}" + "/" + action,
+                    url: "{{route('productsAdd')}}",
                     method: "POST",
                     data: {
                         'name' : name,
@@ -157,6 +227,8 @@
                     dataType: "text",
                     success: function( msg ) {
                         console.log(msg);
+                        document.getElementById('products-add').reset();
+                        $('#category-fields').html('');
                     },
                     error: function( jqXHR, textStatus ) {
                         console.log( "Request failed: " + jqXHR );
