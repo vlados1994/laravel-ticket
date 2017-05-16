@@ -28,14 +28,24 @@ Route::group(['middleware' => 'admin'], function () {
 	Route::get('/admin/routing', 'Admin\Pages\RoutingController@index')->name('routing');
 
 	//catalog routes
-	Route::get('/admin/modules/catalog', 'Admin\Modules\CatalogController@showCategories')
+	Route::get('/admin/modules/catalog', 'Admin\Modules\CatalogController@indexCategories')
          ->name('catalog');
-    Route::get('/admin/modules/products', 'Admin\Modules\CatalogController@showProducts')
+    Route::get('/admin/modules/products', 'Admin\Modules\CatalogController@indexProducts')
         ->name('products');
     Route::post('/admin/modules/catalog/ajax/{action?}', 'Admin\Modules\CatalogController@ajaxCatalog')
         ->name('catalogAjax');
-    Route::post('/admin/modules/products/ajax/{action?}', 'Admin\Modules\CatalogController@ajaxProducts')
-        ->name('productsAjax');
-    Route::get('/admin/modules/products/ajax/{action?}', 'Admin\Modules\CatalogController@ajaxProducts')
-        ->name('productsAjax');
+    Route::post('/admin/modules/products/ajax/attrs', 'Admin\Modules\CatalogController@ajaxAttrsRetrieve')
+        ->name('productsAttrsRetrieve');
+    Route::post('/admin/modules/products/ajax/add', 'Admin\Modules\CatalogController@ajaxProductsAdd')
+        ->name('productsAdd');
+    Route::post('/admin/modules/products/ajax/retrieve/products',
+        'Admin\Modules\CatalogController@ajaxProductsRetrieve')
+        ->name('productsRetrieve');
+    Route::post('/admin/modules/products/ajax/retrieve/cats',
+        'Admin\Modules\CatalogController@ajaxCategoriesRetrieve')
+        ->name('categoriesRetrieve');
+    Route::get('/test',
+        'Admin\Modules\CatalogController@test')
+        ->name('test');
+
 });

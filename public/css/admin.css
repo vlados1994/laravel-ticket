@@ -1,3 +1,37 @@
 .form-inline > * {
    margin:5px 3px;
 }
+
+.top-buffer { margin-top:20px; }
+.bottom-buffer { margin-bottom:20px; }
+
+.no-margins {
+   margin: 0;
+}
+
+.bg-white {
+   background-color: white;
+}
+
+.block-bordered {
+   border: 1px solid lightgray;
+   border-radius: 5px;
+   min-height: 400px;
+}
+
+.block-title-row {
+   border-bottom: 1px solid lightgray;
+   font-size: 20px;
+   font-weight: normal;
+}
+
+#add-category-submit {
+   display: none;
+}
+
+/*admin part*/
+.new-category-field {
+   display: inline-block;
+   width: 40%;
+   margin-right: 10px;
+}

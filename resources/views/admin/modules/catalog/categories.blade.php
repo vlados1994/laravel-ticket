@@ -6,7 +6,7 @@
 
 @section('content')
     <div class="container">
-        <h3>Каталог: настройки</h3>
+        <h3>Каталог: категории</h3>
         <div class="row no-margins">
             <button id="add-category" type="button" class="btn btn-default btn-lg">
                 <span class="glyphicon glyphicon-plus"></span> Добавить новую категорию
